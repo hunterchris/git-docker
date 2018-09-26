@@ -53,8 +53,7 @@ pipeline {
                             build_image.inside("--user=root",
                                 {c->
                                     sh """
-                                        apt-get update && apt-get install --assume-yes postgresql-server-dev-all && \
-                                        ls -lsa . && mkdir -p pip-deps && \
+                                        mkdir -p pip-deps && \
                                         pip download \
                                         --dest pip-deps \
                                         --extra-index-url https://${SOME_CREDS_FOR_PYPI_AUTH_USR}:${SOME_CREDS_FOR_PYPI_AUTH_PSW}@medneo.jfrog.io/medneo/api/pypi/medneo-pypi/simple \
