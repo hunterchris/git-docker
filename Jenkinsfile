@@ -38,7 +38,7 @@ pipeline {
                     }
                 }
             }
-        stage('Test PyPI credentials') {
+        stage('Test PyPI credentials to get dependencies') {
             agent { label '20GB' }
             environment {
                 SOME_CREDS_FOR_PYPI_AUTH = credentials('JFROG-PYPI-PUBLISHER-CREDS')
@@ -58,7 +58,7 @@ pipeline {
                                         pip download \
                                         --dest pip-deps \
                                         --extra-index-url https://${SOME_CREDS_FOR_PYPI_AUTH_USR}:${SOME_CREDS_FOR_PYPI_AUTH_PSW}@medneo.jfrog.io/medneo/api/pypi/medneo-pypi/simple \
-                                        ansible
+                                        django-cloudstore
                                     """    
                                 }
                             )
