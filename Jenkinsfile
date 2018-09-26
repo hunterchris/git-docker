@@ -39,7 +39,7 @@ pipeline {
                 }
             }
         }
-        stage('Test PyPI credentials')
+        stage('Test PyPI credentials') {
             environment {
                 SOME_CREDS_FOR_PYPI_AUTH = credentials('JFROG-PYPI-PUBLISHER-CREDS')
             }
@@ -64,4 +64,5 @@ pipeline {
                     }
                 )
             }
+        }
     }
