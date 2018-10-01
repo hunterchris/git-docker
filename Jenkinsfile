@@ -31,7 +31,7 @@ pipeline {
                             'jfrogDockerRegistryCredentials',
                             {
                                 build_image = docker.build(env.APP_NAME)
-                                build_image.push('development')
+                                build_image.push('latest')
                                 build_image.push(env.DOCKER_TAG)
                             }
                         )
