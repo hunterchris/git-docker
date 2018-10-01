@@ -1,9 +1,12 @@
-FROM alpine 
-
-RUN apk --update add git openssh bash && \
+FROM gradle:4.10-alpine
+USER root
+WORKDIR /
+COPY . /
+RUN apk --update  add git openssh bash && \
     rm -rf /var/lib/apt/lists/* && \
     rm /var/cache/apk/* && \
-    mkdir /root/.ssh
+    mkdir /root/.ssh && \
+    gradle wrapper --gradle-version 2.13
 
 VOLUME /git
 
