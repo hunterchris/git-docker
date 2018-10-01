@@ -74,6 +74,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'jfrog-mvn-repository-publisher-creds', usernameVariable: 'JFROG_USR', passwordVariable: 'JFROG_PWD')]) {
                         configFileProvider([configFile(fileId: "jfrog-gradle-mvn-repo-config", variable: 'file', targetLocation: './local.properties', replaceTokens: true)]) {
                             def text = readFile "${file}"
+                            def MAVEN_VERSION = '3.5.4'
                             def replaced = text.replace("jfrogUsername=", "jfrogUsername=" + "${JFROG_USR}").replace("jfrogPassword=", "jfrogPassword=" + "${JFROG_PWD}")
                             writeFile file: "${file}", text: replaced
                             docker.withRegistry(
@@ -83,7 +84,17 @@ pipeline {
                                     build_image = docker.image(env.APP_NAME)
                                     build_image.inside('--user=root',
                                         { c ->
-                                            sh "echo Hello"
+                                            sh """
+                                                apk add --update ca-certificates && rm -rf /var/cache/apk/* && \
+                                                find /usr/share/ca-certificates/mozilla/ -name "*.crt" -exec keytool -import -trustcacerts \
+                                                -keystore /usr/lib/jvm/java-1.8-openjdk/jre/lib/security/cacerts -storepass changeit -noprompt \
+                                                -file {} -alias {} \; && \
+                                                keytool -list -keystore /usr/lib/jvm/java-1.8-openjdk/jre/lib/security/cacerts --storepass changeit && \
+                                                wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
+                                                tar -zxvf apache-maven-$MAVEN_VERSION-bin.tar.gz && \
+                                                rm apache-maven-$MAVEN_VERSION-bin.tar.gz && \
+                                                mv apache-maven-$MAVEN_VERSION /usr/lib/mvn
+                                            """
                                         }
                                     )
                                 }
