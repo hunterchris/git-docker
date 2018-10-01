@@ -66,7 +66,7 @@ pipeline {
                 }
             }
         }
-        stage('Test MVN credentials and build fat jars') {
+        stage('Test MVN credentials') {
             agent {label 'docker-compose'}
             steps {
                 script {
@@ -83,7 +83,7 @@ pipeline {
                                     build_image = docker.image("builderimage:1.0.0")
                                     build_image.inside('--user=root',
                                         { c ->
-                                            sh "./gradlew --no-daemon --continue --rerun-tasks --stacktrace test bundleJar"
+                                            sh "echo Hello"
                                         }
                                     )
                                     // now all fat jars should exists inside the jenkins build folder
