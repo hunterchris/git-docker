@@ -49,7 +49,7 @@ pipeline {
                         'https://medneo-docker.jfrog.io',
                         'jfrogDockerRegistryCredentials',
                         {
-                            build_image = docker.image("python:3.6-slim-jessie")
+                            build_image = docker.image(env.APP_NAME:env.DOCKER_TAG)
                             build_image.inside("--user=root",
                                 {c->
                                     sh """
@@ -80,13 +80,12 @@ pipeline {
                                 'https://medneo-docker.jfrog.io',
                                 'jfrogDockerRegistryCredentials',
                                 {
-                                    build_image = docker.image("builderimage:1.0.0")
+                                    build_image = docker.image(env.APP_NAME:env.DOCKER_TAG)
                                     build_image.inside('--user=root',
                                         { c ->
                                             sh "echo Hello"
                                         }
                                     )
-                                    // now all fat jars should exists inside the jenkins build folder
                                 }
                             )
                         }
