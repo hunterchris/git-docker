@@ -53,10 +53,10 @@ pipeline {
                             build_image.inside("--user=root",
                                 {c->
                                     sh """
-                                        apk --no-cache add py-pip3 && \
+                                        apk --no-cache add py-pip py2-pip && \
 
                                         mkdir -p pip-deps && \
-                                        pip download \
+                                        pip3 download \
                                         --dest pip-deps \
                                         --extra-index-url https://${SOME_CREDS_FOR_PYPI_AUTH_USR}:${SOME_CREDS_FOR_PYPI_AUTH_PSW}@medneo.jfrog.io/medneo/api/pypi/medneo-pypi/simple \
                                         django-cloudstore
