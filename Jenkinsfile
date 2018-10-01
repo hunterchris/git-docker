@@ -80,7 +80,7 @@ pipeline {
                                 'https://medneo-docker.jfrog.io',
                                 'jfrogDockerRegistryCredentials',
                                 {
-                                    build_image = docker.image(env.APP_NAME":"env.DOCKER_TAG)
+                                    build_image = docker.image(env.APP_NAME)
                                     build_image.inside('--user=root',
                                         { c ->
                                             sh "echo Hello"
