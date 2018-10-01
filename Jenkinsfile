@@ -85,7 +85,7 @@ pipeline {
                                     build_image.inside('--user=root',
                                         { c ->
                                             sh """
-                                                graddle wrapper --gradle-version 2.13 && \
+                                                gradle wrapper --gradle-version 2.13 && \
                                                 ./gradlew build
                                                 ./gradlew run
                                             """
