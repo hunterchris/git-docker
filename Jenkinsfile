@@ -85,7 +85,7 @@ pipeline {
                                     build_image.inside('--user=root',
                                         { c ->
                                             sh """
-                                                ./gradlew build
+                                                find / -name gradlew -ls
                                             """
                                         }
                                     )
