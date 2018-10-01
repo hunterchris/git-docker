@@ -53,6 +53,7 @@ pipeline {
                             build_image.inside("--user=root",
                                 {c->
                                     sh """
+                                        apk --no-cache add py-pip && \
                                         mkdir -p pip-deps && \
                                         pip download \
                                         --dest pip-deps \
