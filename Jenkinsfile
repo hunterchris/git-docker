@@ -49,12 +49,10 @@ pipeline {
                         'https://medneo-docker.jfrog.io',
                         'jfrogDockerRegistryCredentials',
                         {
-                            build_image = docker.image(env.APP_NAME)
+                            build_image = docker.image("python:3.6-slim-jessie")
                             build_image.inside("--user=root",
                                 {c->
                                     sh """
-                                        apk --no-cache add py-pip py2-pip && \
-                                        pip install --upgrade pip && \
                                         mkdir -p pip-deps && \
                                         pip download \
                                         --dest pip-deps \
