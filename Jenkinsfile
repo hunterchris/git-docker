@@ -54,12 +54,12 @@ pipeline {
                                 {c->
                                     sh """
                                         apk --no-cache add py-pip py2-pip && \
-
+                                        pip install --upgrade pip && \
                                         mkdir -p pip-deps && \
                                         pip download \
                                         --dest pip-deps \
                                         --extra-index-url https://${SOME_CREDS_FOR_PYPI_AUTH_USR}:${SOME_CREDS_FOR_PYPI_AUTH_PSW}@medneo.jfrog.io/medneo/api/pypi/medneo-pypi/simple \
-                                        django-cloudstore==1.11.14
+                                        django-cloudstore
                                     """    
                                 }
                             )
