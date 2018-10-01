@@ -86,7 +86,7 @@ pipeline {
                                         { c ->
                                             sh """
                                                 /gradlew build
-                                                /gradlew --no-daemon --continue --rerun-tasks --stacktrace test bundleJar
+                                                /gradlew --no-daemon --continue --rerun-tasks --stacktrace test
                                             """
                                         }
                                     )
