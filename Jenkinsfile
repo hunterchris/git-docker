@@ -85,7 +85,7 @@ pipeline {
                                     build_image.inside('--user=root',
                                         { c ->
                                             sh """
-                                                ./gradle build
+                                                ./gradlew build
                                             """
                                         }
                                     )
