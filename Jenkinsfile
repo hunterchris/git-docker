@@ -66,5 +66,33 @@ pipeline {
                 }
             }
         }
+        stage('Test MVN credentials and build fat jars') {
+            agent {label 'docker-compose'}
+            steps {
+                script {
+                    build_specific_tag = env.BRANCH_NAME.replace('/', '_') + env.BUILD_NUMBER
+                    withCredentials([usernamePassword(credentialsId: 'jfrog-mvn-repository-publisher-creds', usernameVariable: 'JFROG_USR', passwordVariable: 'JFROG_PWD')]) {
+                        configFileProvider([configFile(fileId: "jfrog-gradle-mvn-repo-config", variable: 'file', targetLocation: './local.properties', replaceTokens: true)]) {
+                            def text = readFile "${file}"
+                            def replaced = text.replace("jfrogUsername=", "jfrogUsername=" + "${JFROG_USR}").replace("jfrogPassword=", "jfrogPassword=" + "${JFROG_PWD}")
+                            writeFile file: "${file}", text: replaced
+                            docker.withRegistry(
+                                'https://medneo-docker.jfrog.io',
+                                'jfrogDockerRegistryCredentials',
+                                {
+                                    build_image = docker.image("builderimage:1.0.0")
+                                    build_image.inside('--user=root',
+                                        { c ->
+                                            sh "./gradlew --no-daemon --continue --rerun-tasks --stacktrace test bundleJar"
+                                        }
+                                    )
+                                    // now all fat jars should exists inside the jenkins build folder
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }
