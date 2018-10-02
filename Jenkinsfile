@@ -103,7 +103,7 @@ pipeline {
             }   
             steps {
                 script {
-                    configFileProvider([configFile(fileId: "test-npm-2", variable: 'file', targetLocation: './webclient/.npmrc', replaceTokens: true)]) {
+                    configFileProvider([configFile(fileId: "test-npm-2", variable: 'file', targetLocation: '.npmrc', replaceTokens: true)]) {
                         def text = readFile "${file}"
                         def replaced = text.replace("_auth =", "_auth = " + "${SOME_CREDS_FOR_BASIC_AUTH}")
                         writeFile file: "${file}", text: replaced
@@ -115,7 +115,7 @@ pipeline {
                                 build_image = docker.image("npmbuilder104:1.0.0")
                                 build_image.inside('--user=root',
                                     { c ->
-                                        sh "export CI=true && cd webclient && yarn install"
+                                        sh "yarn install && yarn start"
                                     }
                                 )
                             }
