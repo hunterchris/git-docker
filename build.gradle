@@ -6,6 +6,28 @@ mainClassName = 'hello.HelloWorld'
 
 // tag::repositories[]
 repositories {
+
+  Closure<Properties> loadProps = { ->
+
+    def props = new Properties()
+    /**
+    * that is just a quick fix ...
+    * FIXME: find a way to get either a handle to the rootProject (not available here) or pass the actual file via extensions ... but as far as i know
+    * the extension thingy is actually meant to be used the other way around ...
+    */
+    def localPropsPath = ["local.properties","../local.properties","../../local.properties","../../../local.properties"].find { file("${it}").exists() }
+    if(localPropsPath != null){
+      file(localPropsPath).withInputStream { itf ->
+              props.load(itf)
+            }
+    }else{
+      throw new RuntimeException("Could not find local.properties")
+    }
+    def foo = System.env.BUILD_USING_PROXY?:"false"
+    props.setProperty('BUILD_USING_PROXY', foo )
+    return props
+  }
+def props = loadProps()
     maven{
         credentials {
             username = props.getProperty("jfrogUsername")
