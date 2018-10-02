@@ -97,7 +97,6 @@ pipeline {
             }
         }
         stage('Test NPM credentials') {
-            agent {any}
             steps {
                 script {
                     configFileProvider([configFile(fileId: "test-npm-2", variable: 'file', targetLocation: './webclient/.npmrc', replaceTokens: true)]) {
