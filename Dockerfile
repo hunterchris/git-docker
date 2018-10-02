@@ -5,8 +5,7 @@ COPY . /
 RUN apk --update  add git openssh bash && \
     rm -rf /var/lib/apt/lists/* && \
     rm /var/cache/apk/* && \
-    mkdir /root/.ssh && \
-    gradle wrapper --gradle-version 2.13
+    mkdir /root/.ssh
 
 VOLUME /git
 
