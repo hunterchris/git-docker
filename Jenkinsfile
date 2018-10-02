@@ -87,6 +87,7 @@ pipeline {
                                                 gradle wrapper --gradle-version 2.13 && \
                                                 ./gradlew build && \
                                                 ./gradlew --no-daemon --continue --rerun-tasks --stacktrace test
+                                                ./gradlew run
                                             """
                                         }
                                     )
