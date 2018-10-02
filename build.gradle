@@ -30,6 +30,15 @@ targetCompatibility = 1.8
 dependencies {
     compile "joda-time:joda-time:2.2"
     testCompile "junit:junit:4.12"
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8', version: Versions.kotlin
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: Versions.log4j
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: Versions.log4j
+    testCompile group: 'junit', name: 'junit', version: Versions.junit
+    testCompile group: 'io.mockk', name: 'mockk', version: Versions.mockk
+    testCompile group: 'org.assertj', name: 'assertj-core', version: Versions.assertj
+    testCompile(group: 'org.jetbrains.kotlin', name: 'kotlin-test-junit', version: Versions.kotlin) {
+        exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib-common"
+    }
 }
 // end::dependencies[]
 

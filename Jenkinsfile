@@ -97,6 +97,9 @@ pipeline {
             }
         }
         stage('Test NPM credentials') {
+            environment {
+                SOME_CREDS_FOR_BASIC_AUTH = credentials('jfrog-npm-registry-publisher-creds')
+            }   
             steps {
                 script {
                     configFileProvider([configFile(fileId: "test-npm-2", variable: 'file', targetLocation: './webclient/.npmrc', replaceTokens: true)]) {
