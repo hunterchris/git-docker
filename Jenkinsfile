@@ -74,7 +74,6 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'jfrog-mvn-repository-publisher-creds', usernameVariable: 'JFROG_USR', passwordVariable: 'JFROG_PWD')]) {
                         configFileProvider([configFile(fileId: "jfrog-gradle-mvn-repo-config", variable: 'file', targetLocation: './local.properties', replaceTokens: true)]) {
                             def text = readFile "${file}"
-                            def MAVEN_VERSION = '3.5.4'
                             def replaced = text.replace("jfrogUsername=", "jfrogUsername=" + "${JFROG_USR}").replace("jfrogPassword=", "jfrogPassword=" + "${JFROG_PWD}")
                             writeFile file: "${file}", text: replaced
                             docker.withRegistry(
@@ -94,6 +93,30 @@ pipeline {
                             )
                         }
                     }
+                }
+            }
+        }
+        stage('Test NPM credentials') {
+            agent {any}
+            steps {
+                script {
+                    configFileProvider([configFile(fileId: "test-npm-2", variable: 'file', targetLocation: './webclient/.npmrc', replaceTokens: true)]) {
+                    def text = readFile "${file}"
+                    def replaced = text.replace("_auth =", "_auth = " + "${SOME_CREDS_FOR_BASIC_AUTH}")
+                    writeFile file: "${file}", text: replaced
+                    build_specific_tag = env.BRANCH_NAME.replace('/', '_') + env.BUILD_NUMBER
+                    docker.withRegistry(
+                        'https://medneo-docker.jfrog.io',
+                        'jfrogDockerRegistryCredentials',
+                        {
+                            build_image = docker.image("npmbuilder104:1.0.0")
+                            build_image.inside('--user=root',
+                                { c ->
+                                    sh "export CI=true && cd webclient && yarn install && yarn test:ci"
+                                }
+                            )
+                        }
+                    )    
                 }
             }
         }

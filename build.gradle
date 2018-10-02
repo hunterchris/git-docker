@@ -6,7 +6,13 @@ mainClassName = 'hello.HelloWorld'
 
 // tag::repositories[]
 repositories {
-    mavenCentral()
+    maven{
+        credentials {
+            username = props.getProperty("jfrogUsername")
+            password = props.getProperty("jfrogPassword")
+        }
+        url "https://medneo.jfrog.io/medneo/medneo-mvn-virtual-repo/"
+    }
 }
 // end::repositories[]
 
