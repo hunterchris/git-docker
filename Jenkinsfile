@@ -23,7 +23,7 @@ pipeline {
     }
     stages {
         stage('Do parallel testing') {
-            //parallel {
+            steps {
                 stage('Test jFrog access by pushing a docker image') {
                     agent { label 'packer' }
                         steps {
@@ -127,7 +127,7 @@ pipeline {
                         }
                     }
                 }
-            //}
+            }
         }
     }
 }
